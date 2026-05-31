@@ -1,0 +1,146 @@
+/*khalfia t3 le boton w t3 l7awaf li godam photo*/
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f7f8;
+}
+ /*hda yt7km f la photo */
+.page {
+  min-height: 100vh;
+
+  background-image: url("./assets/incubator .png"); 
+  background-size: 90%; /*ki nktb cover twli photo kbira*/
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+}
+ /*hadi t3 6aba9a lbida li fo9 photo bebe */
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.30);
+  z-index: 0;
+}
+
+
+.navbar,
+.cards-container {
+  position: relative;
+  z-index: 1; /*drna 1bch mayjoch le carts t7t 6b9a bida*/
+}
+
+/*hda yt7km fl ktiba li fl chari6*/
+.navbar {
+  background: #003f98;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;/*a9sa lymin w yasar automatiq*/
+  align-items: center;
+
+  padding: 18px 40px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.user {
+  font-size: 20px;
+}
+/*yt7km f les carte y3ni kifch ybano m3a ba3d*/
+.cards-container {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  gap: 25px;
+
+  padding: 40px;
+}
+/*chakl cart*/
+.card {
+  background: white;
+
+  border-radius: 18px;
+
+  padding: 30px 20px;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.15);
+}
+/*9bl ma ncklici 3lia kifch ytbdlo*/
+.card:hover {
+  transform: translateY(-6px);
+
+ background:rgb(18, 25, 141) ; /* أزرق خفيف */
+  box-shadow: 0 10px 25px rgba(0, 63, 152, 0.25);
+}
+
+.card.active {
+  background: linear-gradient(
+    135deg,
+    #003cff,
+    #00aaff
+  );
+
+  color: white;
+}
+
+.icon {
+  margin-bottom: 15px;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.badge {
+  display: inline-block;
+
+  margin-top: 15px;
+
+  background: #00ff88;
+
+  color: black;
+
+  padding: 6px 14px;
+
+  border-radius: 20px;
+
+  font-weight: bold;
+
+  font-size: 14px;
+}
+/*yndam ktba*/
+.user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  font-size: 20px;
+}
+/*t3 logo*/
+.logo {
+  width: 45px;
+  height: 45px;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+
+  background: white;
+  padding: 3px;
+}
+
