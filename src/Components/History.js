@@ -8,7 +8,7 @@ function History() {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/history'); //fask yb3th 6lb l react w yroh l route t3 python
+      const response = await fetch('http://127.0.0.1:5000/history'); //flask yb3th 6lb l react w yroh l route t3 python
       if (response.ok) {
         const jsonData = await response.json();
         setHistoryData(jsonData); //ykhzan bayanat dkl history data
@@ -33,9 +33,9 @@ function History() {
   return (
     <div style={{ padding: '20px', backgroundColor: '#f4f7f6', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
       <Navigation />
-      <h2 style={{ textAlign: 'center', color: '#2c3e50', marginBottom: '30px' }}>📊 سجل بيانات الحاضنة (History Log)</h2>
+      <h2 style={{ textAlign: 'center', color: '#2c3e50', marginBottom: '30px' }}>📊 Incubator History Log</h2>
       
-      {loading && <p style={{ textAlign: 'center' }}>جاري تحميل البيانات التاريخية...</p>}
+      {loading && <p style={{ textAlign: 'center' }}>Loading historical data...</p>}
       
       {error && (
         <div style={{ backgroundColor: '#ffebee', color: '#c62828', padding: '10px', borderRadius: '5px', textAlign: 'center', marginBottom: '20px' }}>
@@ -44,7 +44,7 @@ function History() {
       )}
 
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        {!loading && !error && historyData.length === 0 && <p style={{ textAlign: 'center' }}>لا توجد بيانات مسجلة حالياً.</p>}
+        {!loading && !error && historyData.length === 0 && <p style={{ textAlign: 'center' }}>No recorded data available at the moment.</p>}
 
         {historyData.map((item, index) => (
           <div key={index} style={cardStyle}>

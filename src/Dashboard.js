@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import incubatorImg from "./assets/incubator .png";
 import logoUniv from "./assets/logouniv.png";
+import {FaReact} from "react-icons/fa";
 
 import {
   Activity,
@@ -54,12 +55,12 @@ export default function Dashboard() {
   return (
     <div className="page">
 
-      <div className="navbar">
-
-        <h1>
+     <div className="navbar">
+      <h1 style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: 0 }}>
+          <FaReact size={50} color="#61dafb" className="react-icon" />
           Digital Twin: Infant Incubator System
         </h1>
-        
+  
 
        <div className="user">
 
@@ -69,7 +70,7 @@ export default function Dashboard() {
     className="logo"
   />
 
-  <span>Welcome, Eng. Ali</span>
+  <span>Welcome, Eng.</span>
 
 </div>
       </div>

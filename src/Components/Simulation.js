@@ -20,17 +20,39 @@ const Simulation = () => {
     const steps = 3500; 
     const tempResults = [];
 
-    for (let t = 0; t < steps; t += 10) {
-      const Q_heater = (settings.heater / 100.0) * 500;
-      const Q_loss = 2.5 * 1.5 * (Ta - 25.0);
-      Ta += (Q_heater - Q_loss) / (1.2 * 0.12 * 1005) * 10;
+    // الثوابت الفيزيائية 
+    const V_new = 0.166;         // الحجم  للحاضنة بالمتر المكعب
+    const A_wall_new = 1.88;     // المساحة السطحية 
+    const rho_air = 1.2;
+    const cp_air = 1005;
+    
+    // حساب السعة الحرارية 
+    const Cair_new = rho_air * V_new * cp_air; 
 
-      const humidity_loss = 0.0005 * (RH - 40.0); 
-      const dRH_dt = 50000 * ((settings.humidity / 100.0) * 0.00001) - humidity_loss;
+    // معطيات الرضيع الخديج المضبوطة (1.5 كغ)
+    const m_core_new = 1.3;     
+    const m_skin_new = 0.2;      
+    const c_body = 3500;
+    const k_cs_new = 2.5;        
+    const h_skin = 7.5;       
+    const A_skin_new = 0.13;     
+    const Q_met_new = 2.3;     
+
+    for (let t = 0; t < steps; t += 10) {
+      // 1) نموذج درجة حرارة الهواء المحدث
+      const Q_heater = (settings.heater / 100.0) * 500; 
+      const Q_loss = 2.5 * A_wall_new * (Ta - 25.0);    
+      Ta += ((Q_heater - Q_loss) / Cair_new) * 10;      
+
+      // 2) نموذج الرطوبة النسبية المحدث باستبدال القيم مباشرة
+      const humidity_loss = 0.05 * (RH - 40.0); 
+      const dRH_dt = 50 * ((settings.humidity / 100.0) * 0.005) - humidity_loss;
       RH = Math.max(0, Math.min(RH + dRH_dt * 10, 100));
 
-      const dTc_dt = (8 - 5 * (T_core - T_skin)) / (1.5 * 3500);
-      const dTs_dt = (5 * (T_core - T_skin) - 8 * 0.1 * (T_skin - Ta)) / (0.5 * 3500);
+      // 3) النموذج الحراري للرضيع 
+      const dTc_dt = (Q_met_new - k_cs_new * (T_core - T_skin)) / (m_core_new * c_body);
+      const dTs_dt = (k_cs_new * (T_core - T_skin) - h_skin * A_skin_new * (T_skin - Ta)) / (m_skin_new * c_body);
+      
       T_core += dTc_dt * 10;
       T_skin += dTs_dt * 10;
 
@@ -49,16 +71,16 @@ const Simulation = () => {
     <div style={{ padding: '20px' }}>
       <div style={{ background: '#eee', padding: '15px', borderRadius: '8px', marginBottom: '20px' }}>
       <Navigation />
-        <h3>إعدادات المحاكاة (Simulation Settings)</h3>
+        <h3>Simulation Settings</h3>
         
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginBottom: '15px' }}>
           <div>
-            <label>heater_Pwm%: </label>
+            <label>Heater PWM: </label>
             <input type="range" min="0" max="100" value={settings.heater} onChange={(e) => setSettings({...settings, heater: e.target.value})} />
             <span> {settings.heater}%</span>
           </div>
           <div>
-            <label>Humidifier_Pwm%: </label>
+            <label>Humidifier PWM: </label>
             <input type="range" min="0" max="100" value={settings.humidity} onChange={(e) => setSettings({...settings, humidity: e.target.value})} />
             <span> {settings.humidity}%</span>
           </div>
@@ -80,36 +102,36 @@ const Simulation = () => {
         </div>
 
         <button onClick={startSimulation} style={{ padding: '8px 20px', cursor: 'pointer', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
-          Run
+          Run Simulation
         </button>
       </div>
 
-      <h4>مخطط درجات الحرارة</h4>
-      <div style={{ width: '100%', height: 300, background: '#f9f9f9', borderRadius: '8px', marginBottom: '30px' }}>
+      <h4>Temperature Graph</h4>
+      <div style={{ width: '100%', height: 320, background: '#f9f9f9', borderRadius: '8px', marginBottom: '40px', paddingBottom: '15px' }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={results}>
+          <LineChart data={results} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" />
-            <YAxis unit="C" domain={['auto', 'auto']} />
+            <XAxis dataKey="time" label={{ value: 'Time (s)', position: 'insideBottom', offset: -10 }} />
+            <YAxis label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft', offset: 0 }} domain={['auto', 'auto']} />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="air" stroke="#ff7300" name="Air" dot={false} />
-            <Line type="monotone" dataKey="core" stroke="#1c15a1" name="Core" dot={false} />
-            <Line type="monotone" dataKey="skin" stroke="#169446" name="Skin" dot={false} />
+            <Legend verticalAlign="top" height={36}/>
+            <Line type="monotone" dataKey="air" stroke="#ff7300" name="Air Temperature" dot={false} strokeWidth={2} />
+            <Line type="monotone" dataKey="core" stroke="#1c15a1" name="Core Temperature" dot={false} strokeWidth={2} />
+            <Line type="monotone" dataKey="skin" stroke="#169446" name="Skin Temperature" dot={false} strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      <h4>مخطط الرطوبة النسبية</h4>
-      <div style={{ width: '100%', height: 300, background: '#f0faff', borderRadius: '8px' }}>
+      <h4>Humidity Graph</h4>
+      <div style={{ width: '100%', height: 320, background: '#f0faff', borderRadius: '8px', paddingBottom: '15px' }}>
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={results}>
+          <LineChart data={results} margin={{ top: 10, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" />
-            <YAxis unit="%" domain={[0, 100]} />
+            <XAxis dataKey="time" label={{ value: 'Time (s)', position: 'insideBottom', offset: -10 }} />
+            <YAxis label={{ value: 'Humidity (%)', angle: -90, position: 'insideLeft', offset: 10 }} domain={[0, 100]} />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="humidity" stroke="#0088FE" name="Humidity %" dot={false} />
+            <Legend verticalAlign="top" height={36}/>
+            <Line type="monotone" dataKey="humidity" stroke="#0088FE" name="Relative Humidity" dot={false} strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>

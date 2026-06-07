@@ -47,7 +47,7 @@ function Monitoring() {
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h2>Live Monitoring Dashboard</h2>
         
-        {/* مؤشر حالة الاتصال بالسيرفر */}
+        {/* مؤشر حالة الاتصال بالسيرفر*/}
         <div style={{ marginBottom: '20px' }}>
           <span style={{ 
             padding: '5px 15px', 
@@ -119,8 +119,8 @@ const containerStyle = {
 };
 
 const cardStyle = {
-  background: '#fff',
-  border: '1px solid #e1e4e8',
+  background: 'rgb(61, 52, 185)4e6',
+  border: '1px solid #021125',
   borderRadius: '12px',
   padding: '15px',
   width: '160px',

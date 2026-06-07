@@ -1,4 +1,4 @@
-/*khalfia t3 le boton w t3 l7awaf li godam photo*/
+/*khalfia t3 boton w t3 l7awaf li godam photo*/
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -86,6 +86,13 @@ body {
  background:rgb(18, 25, 141) ; /* أزرق خفيف */
   box-shadow: 0 10px 25px rgba(0, 63, 152, 0.25);
 }
+/*9bl ma ncklici 3lia kifch ytbdlo*/
+.card:hover {
+  transform: translateY(-6px);
+
+ background:rgb(18, 25, 141) ; /* أزرق خفيف */
+  box-shadow: 0 10px 25px rgba(0, 63, 152, 0.25);
+}
 
 .card.active {
   background: linear-gradient(
@@ -142,5 +149,17 @@ body {
 
   background: white;
   padding: 3px;
+}
+.react-icon {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
